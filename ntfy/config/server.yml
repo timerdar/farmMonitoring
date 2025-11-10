@@ -1,0 +1,8 @@
+base-url: "http://localhost:8080"    # или ваш внешний адрес
+listen-http: ":80"                   # порт ntfy в контейнере
+cache-file: "/var/cache/ntfy/cache.db"
+attachment-cache-dir: "/var/cache/ntfy/attachments"
+
+# Пример простых ACL/доступа
+auth-file: "/var/cache/ntfy/user.db"
+auth-default-access: "read-write"     # или deny-all, если требуется авторизация

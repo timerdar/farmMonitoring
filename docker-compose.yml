@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana/dashboards:/var/lib/grafana/dashboards                 # ваши dashboard JSON
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: "admin"
+      GF_USERS_DEFAULT_THEME: "light"
+    depends_on:
+      - prometheus
+      - ntfy
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+    ports:
+      - "9090:9090"
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: pushgateway
+    restart: unless-stopped
+    ports:
+      - "9091:9091"
+
+  ntfy:
+    image: binwiederhier/ntfy
+    container_name: ntfy
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./ntfy/cache:/var/cache/ntfy
+      - ./ntfy/config:/etc/ntfy
+    environment:
+      - TZ=Europe/Moscow
+    command: serve
+
+# Структура каталогов рядом с docker-compose.yml:
+# ./grafana/dashboards/
+# ./grafana/datasources/
+# ./grafana/provisioning/dashboards/
+# ./prometheus/prometheus.yml      <-- основной конфиг Prometheus
+# ./prometheus/data/               <-- для хранения данных Prometheus
+# ./ntfy/cache/
+# ./ntfy/config/
+
