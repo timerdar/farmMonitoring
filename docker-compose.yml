@@ -56,4 +56,3 @@ services:
 # ./prometheus/data/               <-- для хранения данных Prometheus
 # ./ntfy/cache/
 # ./ntfy/config/
-

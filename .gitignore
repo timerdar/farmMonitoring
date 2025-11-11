@@ -1,1 +1,4 @@
 prometheus/data
+ntfy/cache
+.DS_Store
+.idea/
